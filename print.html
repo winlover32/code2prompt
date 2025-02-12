@@ -1,0 +1,654 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Code2prompt Documentation</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Code2prompt Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction-to-code2prompt"><a class="header" href="#introduction-to-code2prompt">Introduction to <code>code2prompt</code></a></h1>
+<p><code>code2prompt</code> is a powerful command-line tool designed to generate large language model (LLM) prompts directly from your codebase. It simplifies the process of combining and formatting code, making it easy to analyze, document, or refactor code using LLMs like GPT or Claude.</p>
+<p>This tool is built with scalability and customization in mind, allowing you to handle even the largest codebases effortlessly. Whether you are generating documentation, searching for bugs, or refactoring code, <code>code2prompt</code> provides the flexibility and precision needed for various development tasks.</p>
+<hr />
+<h2 id="key-features"><a class="header" href="#key-features">Key Features</a></h2>
+<ul>
+<li><strong>Generate LLM Prompts</strong>: Quickly convert entire codebases into structured LLM prompts.</li>
+<li><strong>Glob Pattern Filtering</strong>: Include or exclude specific files and directories using glob patterns.</li>
+<li><strong>Customizable Templates</strong>: Tailor prompt generation with Handlebars templates.</li>
+<li><strong>Token Counting</strong>: Analyze token usage and optimize for LLMs with varying context windows.</li>
+<li><strong>Git Integration</strong>: Include Git diffs and commit messages in prompts for code reviews.</li>
+<li><strong>Respects <code>.gitignore</code></strong>: Automatically ignores files listed in <code>.gitignore</code> to streamline prompt generation.</li>
+</ul>
+<hr />
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h3 id="installation"><a class="header" href="#installation">Installation</a></h3>
+<p>Check out the 👉 <a href="../how_to/install.html">Installation Guide</a> for detailed instructions on how to install <code>code2prompt</code>.</p>
+<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
+<p>Check out the 👉 <a href="../how_to/filter_files.html">Filter Files Guide</a> to learn how to filter files using glob patterns.</p>
+<p>Check out the 👉 <a href="../tutorials/templates.html">Templates Guide</a> to learn how to use custom Handlebars templates.</p>
+<p>With <code>code2prompt</code>, you can unlock the full potential of LLMs by creating well-structured and meaningful prompts from your codebase. Let's get started!</p>
+<hr />
+<h2 id="why-code2prompt"><a class="header" href="#why-code2prompt">Why <code>code2prompt</code>?</a></h2>
+<ol>
+<li>
+<p><strong>Save Time</strong>:</p>
+<ul>
+<li>Automates the process of traversing a codebase and formatting files for LLMs.</li>
+<li>Avoids repetitive copy-pasting of code.</li>
+</ul>
+</li>
+<li>
+<p><strong>Improve Productivity</strong>:</p>
+<ul>
+<li>Provides a structured and consistent format for code analysis.</li>
+<li>Helps identify bugs, refactor code, and write documentation faster.</li>
+</ul>
+</li>
+<li>
+<p><strong>Handle Large Codebases</strong>:</p>
+<ul>
+<li>Designed to work seamlessly with large codebases, respecting context limits of LLMs.</li>
+</ul>
+</li>
+<li>
+<p><strong>Customizable Workflows</strong>:</p>
+<ul>
+<li>Flexible options for filtering files, using templates, and generating targeted prompts.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="example-use-cases"><a class="header" href="#example-use-cases">Example Use Cases</a></h2>
+<ul>
+<li>
+<p><strong>Code Documentation</strong>:
+Automatically generate documentation for public functions, methods, and classes.</p>
+</li>
+<li>
+<p><strong>Bug Detection</strong>:
+Find potential bugs and vulnerabilities by analyzing your codebase with LLMs.</p>
+</li>
+<li>
+<p><strong>Refactoring</strong>:
+Simplify and optimize code by generating prompts for code quality improvements.</p>
+</li>
+<li>
+<p><strong>Learning and Exploration</strong>:
+Understand new codebases by generating summaries and detailed breakdowns.</p>
+</li>
+<li>
+<p><strong>Git Commit and PR Descriptions</strong>:
+Generate meaningful commit messages and pull request descriptions from Git diffs.</p>
+</li>
+</ul>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="using-the-glob-pattern-filter"><a class="header" href="#using-the-glob-pattern-filter">Using the Glob Pattern Filter</a></h1>
+<p>This tutorial demonstrates how to use the <strong>glob pattern tool</strong> in <code>code2prompt</code> to filter and manage files based on include and exclude patterns. Glob patterns work similarly to tools like <code>tree</code> or <code>grep</code>, providing powerful filtering capabilities. Check out the <a href="tutorials/../explanations/glob_pattern_tool.html">detailed explanation</a> for more information.</p>
+<hr />
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<p>Ensure you have <code>code2prompt</code> installed. If you haven’t installed it yet, refer to the <a href="tutorials/../how_to/install.html">Installation Guide</a>.</p>
+<hr />
+<h2 id="understanding-include-and-exclude-patterns"><a class="header" href="#understanding-include-and-exclude-patterns">Understanding Include and Exclude Patterns</a></h2>
+<p>Glob patterns allow you to specify rules for filtering files and directories.</p>
+<ul>
+<li><strong>Include Patterns</strong> (<code>--include</code>): Specify files and directories you want to include.</li>
+<li><strong>Exclude Patterns</strong> (<code>--exclude</code>): Specify files and directories you want to exclude.</li>
+<li><strong>Priority</strong> (<code>--include-priority</code>): Resolves conflicts between include and exclude patterns.</li>
+</ul>
+<hr />
+<h2 id="setting-up-the-environment"><a class="header" href="#setting-up-the-environment">Setting Up the Environment</a></h2>
+<p>To practice with glob patterns, let’s create a sample folder structure with some files.</p>
+<h3 id="bash-script-to-generate-the-test-structure"><a class="header" href="#bash-script-to-generate-the-test-structure">Bash Script to Generate the Test Structure</a></h3>
+<p>Run this script to set up a temporary directory structure:</p>
+<pre><code class="language-bash">#!/bin/bash
+
+# Create base directory
+mkdir -p test_dir/{lowercase,uppercase,.secret}
+
+# Create files in the structure
+echo "content foo.py" &gt; "test_dir/lowercase/foo.py"
+echo "content bar.py" &gt; "test_dir/lowercase/bar.py"
+echo "content baz.py" &gt; "test_dir/lowercase/baz.py"
+echo "content qux.txt" &gt; "test_dir/lowercase/qux.txt"
+echo "content corge.txt" &gt; "test_dir/lowercase/corge.txt"
+echo "content grault.txt" &gt; "test_dir/lowercase/grault.txt"
+
+echo "CONTENT FOO.py" &gt; "test_dir/uppercase/FOO.PY"
+echo "CONTENT BAR.py" &gt; "test_dir/uppercase/BAR.PY"
+echo "CONTENT BAZ.py" &gt; "test_dir/uppercase/BAZ.PY"
+echo "CONTENT QUX.txt" &gt; "test_dir/uppercase/QUX.TXT"
+echo "CONTENT CORGE.txt" &gt; "test_dir/uppercase/CORGE.TXT"
+echo "CONTENT GRAULT.txt" &gt; "test_dir/uppercase/GRAULT.TXT"
+
+echo "top secret" &gt; "test_dir/.secret/secret.txt"
+</code></pre>
+<p>To clean up the structure later, run:</p>
+<pre><code class="language-bash">rm -rf test_dir
+</code></pre>
+<hr />
+<h2 id="examples-filtering-files-with-include-and-exclude-patterns"><a class="header" href="#examples-filtering-files-with-include-and-exclude-patterns">Examples: Filtering Files with Include and Exclude Patterns</a></h2>
+<h3 id="case-1-no-include-no-exclude"><a class="header" href="#case-1-no-include-no-exclude">Case 1: No Include, No Exclude</a></h3>
+<p>Command:</p>
+<pre><code class="language-bash">code2prompt test_dir
+</code></pre>
+<h4 id="result"><a class="header" href="#result">Result</a></h4>
+<p>All files are included:</p>
+<ul>
+<li><code>lowercase/foo.py</code></li>
+<li><code>lowercase/bar.py</code></li>
+<li><code>uppercase/FOO.py</code></li>
+<li><code>.secret/secret.txt</code></li>
+</ul>
+<hr />
+<h3 id="case-2-exclude-specific-file-types"><a class="header" href="#case-2-exclude-specific-file-types">Case 2: Exclude Specific File Types</a></h3>
+<p>Exclude <code>.txt</code> files:</p>
+<pre><code class="language-bash">code2prompt test_dir --exclude="*.txt"
+</code></pre>
+<h4 id="result-1"><a class="header" href="#result-1">Result</a></h4>
+<p>Excluded:</p>
+<ul>
+<li>All <code>.txt</code> files</li>
+</ul>
+<p>Included:</p>
+<ul>
+<li><code>lowercase/foo.py</code></li>
+<li><code>lowercase/bar.py</code></li>
+<li><code>uppercase/FOO.py</code></li>
+</ul>
+<hr />
+<h3 id="case-3-include-specific-file-types"><a class="header" href="#case-3-include-specific-file-types">Case 3: Include Specific File Types</a></h3>
+<p>Include only Python files:</p>
+<pre><code class="language-bash">code2prompt test_dir --include="*.py"
+</code></pre>
+<h4 id="result-2"><a class="header" href="#result-2">Result</a></h4>
+<p>Included:</p>
+<ul>
+<li>All <code>.py</code> files</li>
+</ul>
+<p>Excluded:</p>
+<ul>
+<li><code>.secret/secret.txt</code></li>
+</ul>
+<hr />
+<h3 id="case-4-include-and-exclude-with-priority"><a class="header" href="#case-4-include-and-exclude-with-priority">Case 4: Include and Exclude with Priority</a></h3>
+<p>Include <code>.py</code> files but exclude files in the <code>uppercase</code> folder:</p>
+<pre><code class="language-bash">code2prompt test_dir --include="*.py" --exclude="**/uppercase/*" --include-priority=true
+</code></pre>
+<h4 id="result-3"><a class="header" href="#result-3">Result</a></h4>
+<p>Included:</p>
+<ul>
+<li>All <code>lowercase/1</code> files having <code>.py</code> extension</li>
+</ul>
+<p>Excluded:</p>
+<ul>
+<li>All <code>uppercase</code> files</li>
+<li><code>.secret/secret.txt</code></li>
+</ul>
+<hr />
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>The glob pattern tool in <code>code2prompt</code> allows you to filter files and directories effectively using:</p>
+<ul>
+<li><code>--include</code> for specifying files to include</li>
+<li><code>--exclude</code> for files to exclude</li>
+<li><code>--include-priority</code> for resolving conflicts between patterns</li>
+</ul>
+<p>To practice, set up the sample directory, try out the commands, and see how the tool filters files dynamically.</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="templates"><a class="header" href="#templates">Templates</a></h2>
+<p><code>code2prompt</code> comes with a set of built-in templates for common use cases. You can find them in the <a href="tutorials/templates"><code>templates</code></a> directory.</p>
+<h3 id="document-the-codehbs"><a class="header" href="#document-the-codehbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/document-the-code.hbs"><code>document-the-code.hbs</code></a></a></h3>
+<p>Use this template to generate prompts for documenting the code. It will add documentation comments to all public functions, methods, classes and modules in the codebase.</p>
+<h3 id="find-security-vulnerabilitieshbs"><a class="header" href="#find-security-vulnerabilitieshbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/find-security-vulnerabilities.hbs"><code>find-security-vulnerabilities.hbs</code></a></a></h3>
+<p>Use this template to generate prompts for finding potential security vulnerabilities in the codebase. It will look for common security issues and provide recommendations on how to fix or mitigate them.</p>
+<h3 id="clean-up-codehbs"><a class="header" href="#clean-up-codehbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/clean-up-code.hbs"><code>clean-up-code.hbs</code></a></a></h3>
+<p>Use this template to generate prompts for cleaning up and improving the code quality. It will look for opportunities to improve readability, adherence to best practices, efficiency, error handling, and more.</p>
+<h3 id="fix-bugshbs"><a class="header" href="#fix-bugshbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/fix-bugs.hbs"><code>fix-bugs.hbs</code></a></a></h3>
+<p>Use this template to generate prompts for fixing bugs in the codebase. It will help diagnose issues, provide fix suggestions, and update the code with proposed fixes.</p>
+<h3 id="write-github-pull-requesthbs"><a class="header" href="#write-github-pull-requesthbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/write-github-pull-request.hbs"><code>write-github-pull-request.hbs</code></a></a></h3>
+<p>Use this template to create GitHub pull request description in markdown by comparing the git diff and git log of two branches.</p>
+<h3 id="write-github-readmehbs"><a class="header" href="#write-github-readmehbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/write-github-readme.hbs"><code>write-github-readme.hbs</code></a></a></h3>
+<p>Use this template to generate a high-quality README file for the project, suitable for hosting on GitHub. It will analyze the codebase to understand its purpose and functionality, and generate the README content in Markdown format.</p>
+<h3 id="write-git-commithbs"><a class="header" href="#write-git-commithbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/write-git-commit.hbs"><code>write-git-commit.hbs</code></a></a></h3>
+<p>Use this template to generate git commits from the staged files in your git directory. It will analyze the codebase to understand its purpose and functionality, and generate the git commit message content in Markdown format.</p>
+<h3 id="improve-performancehbs"><a class="header" href="#improve-performancehbs"><a href="https://github.com/mufeedvh/code2prompt/tree/main/templates/improve-performance.hbs"><code>improve-performance.hbs</code></a></a></h3>
+<p>Use this template to generate prompts for improving the performance of the codebase. It will look for optimization opportunities, provide specific suggestions, and update the code with the changes.</p>
+<p>You can use these templates by passing the <code>-t</code> flag followed by the path to the template file. For example:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase -t templates/document-the-code.hbs
+</code></pre>
+<h2 id="user-defined-variables"><a class="header" href="#user-defined-variables">User Defined Variables</a></h2>
+<p><code>code2prompt</code> supports the use of user defined variables in the Handlebars templates. Any variables in the template that are not part of the default context (<code>absolute_code_path</code>, <code>source_tree</code>, <code>files</code>) will be treated as user defined variables.</p>
+<p>During prompt generation, <code>code2prompt</code> will prompt the user to enter values for these user defined variables. This allows for further customization of the generated prompts based on user input.</p>
+<p>For example, if your template includes <code>{{challenge_name}}</code> and <code>{{challenge_description}}</code>, you will be prompted to enter values for these variables when running <code>code2prompt</code>.</p>
+<p>This feature enables creating reusable templates that can be adapted to different scenarios based on user provided information.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation-1"><a class="header" href="#installation-1">Installation</a></h1>
+<h2 id="binary-releases"><a class="header" href="#binary-releases">Binary releases</a></h2>
+<p>Download the latest binary for your OS from <a href="https://github.com/mufeedvh/code2prompt/releases">Releases</a>.</p>
+<h2 id="source-build"><a class="header" href="#source-build">Source build</a></h2>
+<p>Requires:</p>
+<ul>
+<li><a href="https://git-scm.org/downloads">Git</a>, <a href="https://rust-lang.org/tools/install">Rust</a> and Cargo.</li>
+</ul>
+<pre><code class="language-sh">git clone https://github.com/mufeedvh/code2prompt.git
+cd code2prompt/
+cargo build --release
+</code></pre>
+<h1 id="cargo"><a class="header" href="#cargo">cargo</a></h1>
+<p>installs from the <a href="https://crates.io"><code>crates.io</code></a> registry.</p>
+<pre><code class="language-sh">cargo install code2prompt
+</code></pre>
+<p>For unpublished builds:</p>
+<pre><code class="language-sh">cargo install --git https://github.com/mufeedvh/code2prompt
+</code></pre>
+<h2 id="aur"><a class="header" href="#aur">AUR</a></h2>
+<p><code>code2prompt</code> is available in the <a href="https://aur.archlinux.org/packages?O=0&amp;K=code2prompt"><code>AUR</code></a>. Install it via any AUR helpers.</p>
+<pre><code class="language-sh">paru/yay -S code2prompt
+</code></pre>
+<h2 id="nix"><a class="header" href="#nix">Nix</a></h2>
+<p>If you are on nix, You can use <code>nix-env</code> or <code>profile</code> to install.</p>
+<pre><code class="language-sh"># without flakes:
+nix-env -iA nixpkgs.code2prompt
+# with flakes:
+nix profile install nixpkgs#code2prompt
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="usage-1"><a class="header" href="#usage-1">Usage</a></h2>
+<p>Generate a prompt from a codebase directory:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase
+</code></pre>
+<p>Use a custom Handlebars template file:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase -t path/to/template.hbs
+</code></pre>
+<p>Filter files using glob patterns:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --include="*.rs,*.toml"
+</code></pre>
+<p>Exclude files using glob patterns:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --exclude="*.txt,*.md"
+</code></pre>
+<p>Exclude files/folders from the source tree based on exclude patterns:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --exclude="*.npy,*.wav" --exclude-from-tree
+</code></pre>
+<p>Display the token count of the generated prompt:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --tokens
+</code></pre>
+<p>Specify a tokenizer for token count:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --tokens --encoding=p50k
+</code></pre>
+<p>Supported tokenizers: <code>cl100k</code>, <code>p50k</code>, <code>p50k_edit</code>, <code>r50k_bas</code>.</p>
+<blockquote>
+<p>[!NOTE]<br />
+See <a href="how_to/filter_files.html#tokenizers">Tokenizers</a> for more details.</p>
+</blockquote>
+<p>Save the generated prompt to an output file:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --output=output.txt
+</code></pre>
+<p>Print output as JSON:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --json
+</code></pre>
+<p>The JSON output will have the following structure:</p>
+<pre><code class="language-json">{
+  "prompt": "&lt;Generated Prompt&gt;", 
+  "directory_name": "codebase",
+  "token_count": 1234,
+  "model_info": "ChatGPT models, text-embedding-ada-002",
+  "files": []
+}
+</code></pre>
+<p>Generate a Git commit message (for staged files):</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --diff -t templates/write-git-commit.hbs
+</code></pre>
+<p>Generate a Pull Request with branch comparing (for staged files):</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --git-diff-branch 'main, development' --git-log-branch 'main, development' -t templates/write-github-pull-request.hbs
+</code></pre>
+<p>Add line numbers to source code blocks:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --line-number
+</code></pre>
+<p>Disable wrapping code inside markdown code blocks:</p>
+<pre><code class="language-sh">code2prompt path/to/codebase --no-codeblock
+</code></pre>
+<ul>
+<li>Rewrite the code to another language.</li>
+<li>Find bugs/security vulnerabilities.</li>
+<li>Document the code.</li>
+<li>Implement new features.</li>
+</ul>
+<blockquote>
+<p>I initially wrote this for personal use to utilize Claude 3.0's 200K context window and it has proven to be pretty useful so I decided to open-source it!</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-the-glob-pattern-filter-works"><a class="header" href="#how-the-glob-pattern-filter-works">How the Glob Pattern Filter Works</a></h1>
+<p>The tool uses glob patterns to include or exclude files and directories, working similarly to tools like <code>tree</code> or <code>grep</code>. Here’s a detailed explanation:</p>
+<h2 id="key-concepts"><a class="header" href="#key-concepts">Key Concepts</a></h2>
+<ul>
+<li><strong>Include List (A)</strong>: A set containing the glob patterns for files and directories you want to include.</li>
+<li><strong>Exclude List (B)</strong>: A set containing the glob patterns for files and directories you want to exclude.</li>
+<li><strong>Universe (Ω)</strong>: The set of all files and directories.</li>
+</ul>
+<p>When you specify an <code>--exclude</code> list and/or an <code>--include</code> list, the following logic applies:</p>
+<h3 id="cases-and-logic"><a class="header" href="#cases-and-logic">Cases and Logic</a></h3>
+<ol>
+<li>
+<p><strong>No include list, no exclude list</strong><br />
+Include everything:<br />
+$$
+\neg A \cap \neg B \implies \Omega
+$$</p>
+</li>
+<li>
+<p><strong>No include list, with exclude list</strong><br />
+Include everything except what matches the exclude list:<br />
+$$
+\neg A \cap B \implies \Omega \setminus B
+$$</p>
+</li>
+<li>
+<p><strong>With include list, no exclude list</strong><br />
+Include only what matches the include list:<br />
+$$
+A \cap \neg B \implies A
+$$</p>
+</li>
+<li>
+<p><strong>With include list and exclude list</strong><br />
+Include what matches the include list and exclude what matches the exclude list. Handle the intersection based on the <code>include_priority</code> parameter:</p>
+<ul>
+<li>
+<p><strong>Include priority == true</strong>:<br />
+$$
+A \setminus (A \cap B)
+$$</p>
+</li>
+<li>
+<p><strong>Include priority != true</strong>*:<br />
+$$
+B \setminus (A \cap B)
+$$</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="visual-representation-of-case-4"><a class="header" href="#visual-representation-of-case-4">Visual Representation of Case 4</a></h3>
+<p>Let (A) and (B) overlap. Depending on the priority, the intersection $$( A \cap B )$$ is either included or excluded based on the <code>include_priority</code> parameter.</p>
+<p><img src="explanations/../../assets/filter.png" alt="Visual Representation of Case 4" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tokenizers-for-code2prompt"><a class="header" href="#tokenizers-for-code2prompt">Tokenizers for <code>code2prompt</code></a></h1>
+<p>When working with language models, text needs to be transformed into a format that the model can understand—<strong>tokens</strong>, which are sequences of numbers. This transformation is handled by a <strong>tokenizer</strong>.</p>
+<hr />
+<h2 id="what-is-a-tokenizer"><a class="header" href="#what-is-a-tokenizer">What is a Tokenizer?</a></h2>
+<p>A tokenizer converts raw text into tokens, which are the building blocks for how language models process input. These tokens can represent words, subwords, or even individual characters, depending on the tokenizer's design.</p>
+<p>For <code>code2prompt</code>, we use the <strong>tiktoken</strong> tokenizer. It’s efficient, robust, and optimized for OpenAI models.
+You can explore its functionality in the official repository</p>
+<p>👉 <a href="https://github.com/openai/tiktoken">tiktoken GitHub Repository</a></p>
+<p>If you want to learn more about tokenizer in general, check out the</p>
+<p>👉 <a href="https://docs.mistral.ai/guides/tokenization/">Mistral Tokenization Guide</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="glob-patterns"><a class="header" href="#glob-patterns">Glob Patterns</a></h1>
+<p>Glob patterns are a simple yet powerful way to match file names and paths using wildcard characters. They are commonly used in command-line interfaces and programming languages to specify sets of filenames or directories. Here's a breakdown of the most commonly used glob patterns:</p>
+<h2 id="basic-wildcards"><a class="header" href="#basic-wildcards">Basic Wildcards</a></h2>
+<ul>
+<li>
+<p><code>*</code>: Matches any number of characters, including zero characters.</p>
+<ul>
+<li>Example: <code>*.txt</code> matches all files ending with <code>.txt</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>?</code>: Matches exactly one character.</p>
+<ul>
+<li>Example: <code>file?.txt</code> matches <code>file1.txt</code>, <code>fileA.txt</code>, but not <code>file10.txt</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>[]</code>: Matches any one of the enclosed characters.</p>
+<ul>
+<li>Example: <code>file[1-3].txt</code> matches <code>file1.txt</code>, <code>file2.txt</code>, <code>file3.txt</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>[!]</code> or <code>[^]</code>: Matches any character not enclosed.</p>
+<ul>
+<li>Example: <code>file[!1-3].txt</code> matches <code>file4.txt</code>, <code>fileA.txt</code>, but not <code>file1.txt</code>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="advanced-patterns"><a class="header" href="#advanced-patterns">Advanced Patterns</a></h2>
+<ul>
+<li>
+<p><code>**</code>: Matches any number of directories and subdirectories recursively.</p>
+<ul>
+<li>Example: <code>**/*.txt</code> matches all <code>.txt</code> files in the current directory and all subdirectories.</li>
+</ul>
+</li>
+<li>
+<p><code>{}</code>: Matches any of the comma-separated patterns enclosed.</p>
+<ul>
+<li>Example: <code>file{1,2,3}.txt</code> matches <code>file1.txt</code>, <code>file2.txt</code>, <code>file3.txt</code>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<ol>
+<li>
+<p><strong>Matching all text files in a directory:</strong></p>
+<pre><code class="language-sh">*.txt
+</code></pre>
+</li>
+<li>
+<p><strong>Matching all files with a single digit before the extension:</strong></p>
+<pre><code class="language-sh">file?.txt
+</code></pre>
+</li>
+<li>
+<p><strong>Matching files with extensions <code>.jpg</code> or <code>.png</code>:</strong></p>
+<pre><code class="language-sh">*.{jpg,png}
+</code></pre>
+</li>
+<li>
+<p><strong>Matching all <code>.txt</code> files in any subdirectory:</strong></p>
+<pre><code class="language-sh">**/*.txt
+</code></pre>
+</li>
+<li>
+<p><strong>Matching files that start with <code>a</code> or <code>b</code> and end with <code>.txt</code>:</strong></p>
+<pre><code class="language-sh">{a,b}*.txt
+</code></pre>
+</li>
+</ol>
+<h2 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h2>
+<ul>
+<li><strong>Command-Line Tools:</strong> Glob patterns are extensively used in command-line tools like <code>ls</code>, <code>cp</code>, <code>mv</code>, and <code>rm</code> to specify multiple files or directories.</li>
+<li><strong>Programming Languages:</strong> Languages like Python, JavaScript, and Ruby support glob patterns for file matching through libraries like <code>glob</code> in Python.</li>
+<li><strong>Build Systems:</strong> Tools like Makefile use glob patterns to specify source files and dependencies.</li>
+</ul>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Glob patterns provide a flexible and intuitive way to match filenames and paths, making them invaluable for scripting, automation, and file management tasks. Understanding and utilizing these patterns can significantly enhance your productivity and efficiency in handling files and directories.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
